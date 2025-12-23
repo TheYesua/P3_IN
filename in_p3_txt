@@ -1,0 +1,100 @@
+Inteligencia de Negocio
+Grado en Ingenier ́ıa Inform ́atica
+Pr ́actica 3
+Competici ́on en Kaggle
+Departamento de Ciencias de la Computaci ́on
+e Inteligencia Artificial
+Universidad de Granada
+Curso 2025-2026
+1 Objetivos y Evaluaci ́on
+En esta tercera pr ́actica de la asignatura Inteligencia de Negocio veremos el uso
+de m ́etodos avanzados para aprendizaje supervisado en clasificaci ́on sobre una
+competici ́on especialmente creada en Kaggle
+(https://www.kaggle.com/t/749cea69323c435186c015d4bfc9b7cb, es nece-
+sario crear una cuenta). El estudiante adquirir ́a destrezas para mejorar la capaci-
+dad predictiva del modelo mientras se familiariza con una de las plataformas de
+competici ́on en ciencias de datos m ́as populares.
+La pr ́actica se calificar ́a hasta un m ́aximo de 2.5 puntos. La evaluaci ́on
+se dar ́a en parte en funci ́on de la posici ́on final (relativa al conjunto de estudi-
+antes participantes) que ocupe el resultado propuesto por el estudiante, con una
+asignaci ́on linealmente proporcional entre 2 puntos para la primera posici ́on y
+0,5 puntos para el  ́ultimo. Para ser evaluado, no bastar ́a con subir los resulta-
+dos a Kaggle, se deber ́a tambi ́en adjuntar un documento que describa el proceso
+seguido por el estudiante para resolver la pr ́actica y demostrar mediante la activi-
+dad registrada en Kaggle que ha habido un esfuerzo por mejorar los resultados.
+En otro caso, el alumno no obtendr ́a ninguna puntuaci ́on en esta pr ́actica.
+Sobre la puntuaci ́on obtenida en base a la posici ́on, se aplicar ́a un factor
+corrector [0,5, 1,5] (es decir, se podr ́a reducir o aumentar hasta un 50 %) en
+funci ́on de la calidad de la documentaci ́on presentada y las soluciones abordadas.
+El rendimiento se evaluar ́a seg ́un el F1-score.
+En esta competici ́on, se permite el uso de cualquier software, algoritmo, o
+lenguaje que el estudiante considere  ́util. Est ́a terminantemente prohibido usar
+la clase en los datos de test, en caso de conocerse, para entrenar, configurar o
+mejorar el modelo predictivo. Tambi ́en se proh ́ıbe que los alumnos compartan
+entre ellos soluciones de la competici ́on. Cualquier indicio de estas conductas
+supondr ́a la anulaci ́on de la pr ́actica.
+2 Documentaci ́on
+La documentaci ́on explicar ́a las estrategias seguidas y el progreso que se ha ido
+desarrollando durante la competici ́on. Deber ́an razonarse brevemente los difer-
+entes pasos tomados apoy ́andose en visualizaci ́on de datos u otras t ́ecnicas de
+an ́alisis para comprender las caracter ́ısticas del problema. Se recomienda a ̃nadir
+tambi ́en extractos de los scripts para explicar el trabajo realizado. Ser ́a obliga-
+torio incluir una tabla que contenga tantas filas como soluciones se han subido
+a Kaggle incluyendo columnas que resuman cada experimento conteniendo, al
+menos:
+• La fecha y hora de subida a Kaggle.
+–1–
+• La posici ́on que ocup ́o en ese momento.
+• El score sobre el conjunto de datos de entrenamiento.
+• El score obtenido en Kaggle al subir la predicci ́on en test.
+• Breve descripci ́on del preprocesado realizado.
+• Breve descripci ́on de el/los algoritmo(s) de clasificaci ́on/regresi ́on em-
+pleado(s) y configuraci ́on de par ́ametros de esos algoritmos.
+La ausencia de esta tabla o una descripci ́on incompleta de la misma supondr ́a
+la anulaci ́on de la pr ́actica.
+Adicionalmente, la segunda p ́agina de la documentaci ́on (despu ́es de la por-
+tada y antes del ́ındice) contendr ́a una captura de pantalla de la tabla Leaderboard
+(que contiene las columnas Team, Score, Entires y Last) disponible en la web de
+Kaggle para cada estudiante. De cada subida realizada a Kaggle se conservar ́a
+el fichero .csv y el script en Python o similar usado para ese experimento. Se
+nombrar ́an de forma clara y enumerada para poder identificar con facilidad a qu ́e
+experimento de la tabla corresponde. Este material se entregar ́a junto a la doc-
+umentaci ́on. El alumno deber ́a definir como Team en Kaggle su nombre de pila
+y primer apellido terminando con UGR IN. Por ejemplo: AnaGarcia UGR IN. La
+posici ́on que se valorar ́a para la pr ́actica ser ́a la mejor de la cuenta xxx UGR IN,
+no se aceptar ́a ninguna otra. Se recuerda a los/as estudiantes que Kaggle in-
+corpora mecanismos para detectar m ́ultiples inscripciones en la competici ́on de
+la misma persona y bloquea las cuentas cuando sucede, impidiendo as ́ı seguir
+compitiendo.
+3 Entrega
+La competici ́on en Kaggle finaliza el mi ́ercoles 7 de enero de 2026 a las 23:30.
+Cualquier subida a Kaggle posterior a esa fecha supondr ́a la anulaci ́on de la
+pr ́actica. Tras acabar la competici ́on, el estudiante deber ́a tambi ́en entregar
+antes de esa fecha una documentaci ́on que explique las tareas realizadas y todas
+las soluciones .csv subidas a Kaggle junto con los scripts utilizados.
+Se entregar ́an, al menos, los siguientes ficheros:
+• Documentaci ́on En formato pdf. El nombre del archive se compondr ́a
+con P1 y los apellidos y nombre sin espacios: P1-apellido1-apellido2-
+nombre.pdf, sin acentos. Es decir, la alumna “Mar ́ıa Teresa del Castillo
+G ́omez” subir ́a el archivo P1-delCastillo-Gomez-MariaTeresa.pdf.
+• Software desarrollado Se entregar ́a el c ́odigo desarrollado.
+---
+Descripción en Kaggle del problema:
+
+Los datos corresponden a hojas de tomate infectadas y no infectadas (control). De cada hoja se han extraído de 3 a 4 muestras. Cada muestra es una fila del dataset, y tiene asociados los valores de fluorescencia multicolor (columnas F440, F520, F680 y F740), independientes, y los valores de cámara hiperespectral (un espectro de 300 variables; columnas de w388.13 a w1028.28, que corresponden con las longitudes de onda de 388.13 nm a 1028.28 nm).
+
+La clase está registrada en la columna class. El resto de columnas (exp, dpi, leaf, spot) NO se pueden usar como variables de entrada del modelo.
+
+En el fichero de solución, las clases se tienen que codificar en binario: control (sana) debe ser 0 y botrytis (infectada) debe ser 1.
+---
+Dataset Description
+Los datos corresponden a hojas de tomate infectadas y no infectadas (control). De cada hoja se han extraído de 3 a 4 muestras. Cada muestra es una fila del dataset, y tiene asociados los valores de fluorescencia multicolor (columnas F440, F520, F680 y F740), independientes, y los valores de cámara hiperespectral (un espectro de 300 variables; columnas de w388.13 a w1028.28, que corresponden con las longitudes de onda de 388.13 nm a 1028.28 nm).
+
+La clase está registrada en la columna class. El resto de columnas (exp, dpi, leaf, spot) NO se pueden usar como variables de entrada del modelo.
+
+En el fichero de solución, las clases se tienen que codificar en binario: control (sana) debe ser 0 y botrytis (infectada) debe ser 1.
+
+Archivos
+train.csv - el conjunto de entrenamiento
+sample_submission.csv - un archivo de ejemplo de envío con el formato correcto
+---
