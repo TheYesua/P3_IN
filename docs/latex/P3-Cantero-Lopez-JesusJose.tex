@@ -1,0 +1,349 @@
+\documentclass[11pt]{article}
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{amsmath}
+
+\usepackage{listings}
+\lstset{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    frame=single,
+    breaklines=true,
+    columns=fullflexible
+}
+
+\setlength{\parindent}{0mm}
+\setlength{\parskip}{1em}
+\pagestyle{fancy}
+\setlength{\headheight}{14pt}
+\rhead{Inteligencia de Negocio}
+\lhead{Práctica 3}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyfoot[L]{Grado en Ingeniería Informática}
+\fancyfoot[C]{\thepage}
+\fancyfoot[R]{\hyperref[sec:indice]{Índice}}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{\fill}
+    {\Huge\bfseries Práctica 3 \\[0.5cm]}
+    {\LARGE Competición Kaggle: Clasificación de Hojas de Tomate \\[0.5cm]}
+    {\Large Inteligencia de Negocio \\[2cm]}
+    {\large Jesús J. Cantero \\[0.3cm]}
+    {\large Grupo A \\[0.3cm]}
+    {\large jesusjcl@correo.ugr.es \\[2cm]}
+    {\large Curso 2025--2026 \\[0.5cm]}
+    \vspace*{\fill}
+    {\large Grado en Ingeniería Informática \\}
+    {\large Universidad de Granada (Ceuta)}
+\end{titlepage}
+
+\tableofcontents
+\label{sec:indice}
+\clearpage
+
+% 1. Introducción
+\section{Introducción}
+
+\subsection{Contexto y Motivación}
+
+Esta práctica consiste en una competición Kaggle de clasificación binaria de hojas de tomate. El objetivo es distinguir entre hojas sanas (\textit{control}) y hojas infectadas por el hongo \textit{Botrytis cinerea} (\textit{botrytis}) utilizando datos de fluorescencia multicolor e imágenes hiperespectrales.
+
+La detección temprana de enfermedades en cultivos es fundamental para la agricultura de precisión y la gestión eficiente de recursos. Las técnicas de aprendizaje automático permiten automatizar el diagnóstico a partir de mediciones no destructivas, reduciendo pérdidas y optimizando el uso de tratamientos fitosanitarios.
+
+\subsection{Descripción del Dataset}
+
+El dataset proporcionado contiene mediciones de hojas de tomate:
+
+\begin{itemize}
+    \item \textbf{Conjunto de entrenamiento}: 336 muestras con etiquetas
+    \item \textbf{Conjunto de test}: 143 muestras sin etiquetas
+    \item \textbf{Total de variables}: 309 columnas
+\end{itemize}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        \textbf{Tipo} & \textbf{Columnas} & \textbf{Descripción} \\
+        \midrule
+        Metadatos (NO USAR) & \texttt{exp}, \texttt{dpi}, \texttt{leaf}, \texttt{spot} & Información experimental \\
+        Fluorescencia & \texttt{F440}, \texttt{F520}, \texttt{F680}, \texttt{F740} & 4 valores de fluorescencia \\
+        Hiperespectral & \texttt{w388.13} a \texttt{w1028.28} & 300 variables espectrales \\
+        Target & \texttt{class} & \texttt{control} (0) o \texttt{botrytis} (1) \\
+        \bottomrule
+    \end{tabular}
+    \caption{Descripción de las variables del dataset.}
+    \label{tab:variables}
+\end{table}
+
+\subsection{Herramientas y Tecnologías}
+
+\begin{itemize}
+    \item \textbf{pandas} y \textbf{numpy}: manipulación de datos
+    \item \textbf{scikit-learn}: modelos de clasificación, escalado y validación cruzada
+    \item \textbf{matplotlib} y \textbf{seaborn}: visualización
+    \item \textbf{Jupyter Notebook}: análisis exploratorio interactivo
+\end{itemize}
+
+\clearpage
+\subsection{Métrica de Evaluación}
+
+La métrica utilizada en la competición es el \textbf{F1-score}, definido como:
+
+\[
+F1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+\]
+
+Esta métrica es apropiada para problemas de clasificación binaria con posible desbalance de clases, ya que considera tanto los falsos positivos como los falsos negativos.
+
+\clearpage
+% 2. Análisis Exploratorio de Datos
+\section{Análisis Exploratorio de Datos (EDA)}
+
+\subsection{Distribución de Clases}
+
+El análisis de la distribución de clases revela un desbalance moderado:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lcc}
+        \toprule
+        \textbf{Clase} & \textbf{Muestras} & \textbf{Porcentaje} \\
+        \midrule
+        botrytis & 196 & 58.3\% \\
+        control & 140 & 41.7\% \\
+        \bottomrule
+    \end{tabular}
+    \caption{Distribución de clases en el conjunto de entrenamiento.}
+    \label{tab:distribucion}
+\end{table}
+
+El ratio de desbalance es de 1.40:1, lo cual es moderado y no requiere técnicas agresivas de balanceo.
+
+\subsection{Variables de Fluorescencia}
+
+Las 4 variables de fluorescencia presentan las siguientes características:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lcccc}
+        \toprule
+        \textbf{Variable} & \textbf{Media} & \textbf{Std} & \textbf{Min} & \textbf{Max} \\
+        \midrule
+        F440 & 235.57 & 9.19 & 209.95 & 257.33 \\
+        F520 & 431.88 & 31.66 & 327.26 & 517.98 \\
+        F680 & 773.10 & 120.98 & 484.27 & 1270.81 \\
+        F740 & 1403.55 & 227.24 & 795.12 & 2125.33 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Estadísticas descriptivas de las variables de fluorescencia.}
+    \label{tab:fluorescencia}
+\end{table}
+
+Se observan dos grupos de variables correlacionadas:
+\begin{itemize}
+    \item \textbf{Grupo 1}: F440 y F520 (correlación positiva: 0.89)
+    \item \textbf{Grupo 2}: F680 y F740 (correlación positiva: 0.96)
+\end{itemize}
+
+Existe correlación negativa entre ambos grupos, sugiriendo características complementarias.
+
+\subsection{Variables Espectrales}
+
+El dataset incluye 300 variables espectrales en el rango de 388.13 nm a 1028.28 nm. El análisis de espectros promedio por clase muestra diferencias sutiles pero consistentes entre hojas sanas e infectadas.
+
+\subsection{Análisis de Valores Faltantes y Outliers}
+
+\begin{itemize}
+    \item \textbf{Valores faltantes}: No se detectaron valores faltantes en ninguno de los conjuntos.
+    \item \textbf{Outliers} (método IQR en fluorescencia):
+    \begin{itemize}
+        \item F440: 4 outliers (1.2\%)
+        \item F520: 10 outliers (3.0\%)
+        \item F680: 6 outliers (1.8\%)
+        \item F740: 4 outliers (1.2\%)
+    \end{itemize}
+\end{itemize}
+
+\subsection{Reducción de Dimensionalidad (PCA)}
+
+El análisis de componentes principales revela alta reducibilidad dimensional:
+
+\begin{itemize}
+    \item \textbf{3 componentes} explican el 95\% de la varianza
+    \item \textbf{7 componentes} explican el 99\% de la varianza
+\end{itemize}
+
+Esto indica que, a pesar de tener 304 features, la información relevante se concentra en pocas dimensiones.
+
+\clearpage
+% 3. Preprocesamiento
+\section{Preprocesamiento de Datos}
+
+\subsection{Limpieza de Datos}
+
+Durante la carga de datos se detectó un problema de formato: algunos valores numéricos contenían espacios (ej: \texttt{'232 .25'}). Se implementó una función de limpieza automática:
+
+\begin{lstlisting}
+def clean_numeric_columns(df):
+    for col in df.columns:
+        if df[col].dtype == 'object' and col not in METADATA_COLS + [TARGET_COL]:
+            df[col] = df[col].astype(str).str.replace(' ', '').astype(float)
+    return df
+\end{lstlisting}
+
+\subsection{Preparación de Features}
+
+El pipeline de preprocesamiento incluye:
+
+\begin{enumerate}
+    \item \textbf{Exclusión de metadatos}: Se eliminan las columnas \texttt{exp}, \texttt{dpi}, \texttt{leaf}, \texttt{spot}
+    \item \textbf{Codificación del target}: \texttt{control} $\rightarrow$ 0, \texttt{botrytis} $\rightarrow$ 1
+    \item \textbf{Escalado}: StandardScaler para normalizar las features
+\end{enumerate}
+
+\subsection{Arquitectura del Código}
+
+El código se organiza en módulos reutilizables:
+
+\begin{itemize}
+    \item \texttt{src/preprocessing.py}: Funciones de carga, limpieza y transformación
+    \item \texttt{src/models.py}: Definición y evaluación de modelos
+    \item \texttt{src/utils.py}: Utilidades para submissions y logging
+\end{itemize}
+
+\clearpage
+% 4. Modelado
+\section{Modelado y Experimentación}
+
+\subsection{Metodología}
+
+Se utilizó validación cruzada estratificada con 5 folds para evaluar los modelos, asegurando que cada fold mantiene la proporción de clases del dataset original.
+
+\subsection{Experimento 01: Modelos Baseline}
+
+Se compararon 5 algoritmos de clasificación con parámetros por defecto:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lcc}
+        \toprule
+        \textbf{Modelo} & \textbf{F1-Score (CV)} & \textbf{Desv. Std} \\
+        \midrule
+        Logistic Regression & \textbf{0.9388} & 0.0254 \\
+        SVM (RBF) & 0.9326 & -- \\
+        Random Forest & 0.9266 & -- \\
+        Gradient Boosting & 0.9203 & -- \\
+        KNN (k=5) & 0.8943 & -- \\
+        \bottomrule
+    \end{tabular}
+    \caption{Comparación de modelos baseline con StandardScaler.}
+    \label{tab:baseline}
+\end{table}
+
+\textbf{Resultado}: Logistic Regression obtuvo el mejor F1-score en validación cruzada (0.9388), siendo seleccionado para la primera submission.
+
+\subsection{Configuración del Mejor Modelo}
+
+\begin{lstlisting}
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+
+# Preprocesamiento
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Modelo
+model = LogisticRegression(max_iter=1000, random_state=42)
+model.fit(X_train_scaled, y_train)
+
+# Predicciones
+predictions = model.predict(X_test_scaled)
+\end{lstlisting}
+
+\clearpage
+% 5. Registro de Experimentos
+\section{Registro de Experimentos}
+
+\begin{table}[H]
+    \centering
+    \small
+    \begin{tabular}{ccccccc}
+        \toprule
+        \textbf{Nº} & \textbf{Fecha} & \textbf{Algoritmo} & \textbf{Preprocesado} & \textbf{F1 (CV)} & \textbf{F1 Kaggle} & \textbf{Posición} \\
+        \midrule
+        01 & 23/12/2024 & LogisticRegression & StandardScaler & 0.9388 & [PENDIENTE] & [PENDIENTE] \\
+        \bottomrule
+    \end{tabular}
+    \caption{Registro de submissions a Kaggle.}
+    \label{tab:experimentos}
+\end{table}
+
+% 6. Conclusiones
+\section{Conclusiones y Trabajo Futuro}
+
+\subsection{Conclusiones del EDA}
+
+\begin{enumerate}
+    \item El dataset presenta un desbalance moderado (1.40:1) que no requiere técnicas especiales de balanceo.
+    \item Las variables de fluorescencia forman dos grupos correlacionados con información complementaria.
+    \item Alta reducibilidad dimensional: 3 componentes PCA capturan el 95\% de la varianza.
+    \item No hay valores faltantes y los outliers son escasos (<3\%).
+\end{enumerate}
+
+\subsection{Trabajo Futuro}
+
+\begin{itemize}
+    \item Experimentar con PCA (3-7 componentes) para reducir dimensionalidad
+    \item Probar XGBoost y LightGBM
+    \item Optimización de hiperparámetros con Optuna
+    \item Técnicas de ensemble (Voting, Stacking)
+    \item Selección de features con SelectKBest
+\end{itemize}
+
+\clearpage
+% 7. Estructura de la Entrega
+\section{Estructura de la Entrega}
+
+\begin{verbatim}
+P3/
++-- data/                      # Datos originales
+|   +-- train.csv
+|   +-- test.csv
+|   +-- sample_submission.csv
++-- notebooks/                 # Jupyter notebooks
+|   +-- 01_EDA.ipynb          # Analisis exploratorio
++-- src/                       # Codigo fuente
+|   +-- preprocessing.py       # Preprocesado
+|   +-- models.py             # Modelos
+|   +-- utils.py              # Utilidades
++-- scripts/                   # Scripts de experimentos
+|   +-- exp_01_baseline.py    # Experimento baseline
++-- submissions/               # Archivos CSV para Kaggle
++-- docs/                      # Documentacion
+|   +-- latex/                # Fuentes LaTeX
++-- PLAN_TRABAJO.md           # Plan de trabajo
++-- REGISTRO_EXPERIMENTOS.md  # Registro de experimentos
++-- requirements.txt          # Dependencias
+\end{verbatim}
+
+% 8. Bibliografía
+\section{Bibliografía}
+
+\begin{itemize}
+    \item Pedregosa, F. et al. (2011). \textit{Scikit-learn: Machine Learning in Python}. JMLR, 12, 2825--2830.
+    \item Documentación oficial de scikit-learn: \url{https://scikit-learn.org/stable/}
+    \item Documentación oficial de pandas: \url{https://pandas.pydata.org/}
+\end{itemize}
+
+\end{document}

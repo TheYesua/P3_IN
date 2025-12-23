@@ -4,6 +4,7 @@ Utilidades generales para la Práctica 3 - Kaggle
 
 import pandas as pd
 import numpy as np
+import csv
 from datetime import datetime
 
 
@@ -15,12 +16,18 @@ def create_submission(test_ids, predictions, filename):
         test_ids: IDs de las muestras de test (1 a N)
         predictions: Predicciones (0 o 1)
         filename: Nombre del archivo de salida
+    
+    Note:
+        El formato replica el sample_submission.csv de Kaggle:
+        - Cabecera con comillas: "Id","class"
+        - Datos sin comillas
     """
     submission = pd.DataFrame({
         'Id': test_ids,
         'class': predictions
     })
-    submission.to_csv(filename, index=False)
+    # quoting=csv.QUOTE_NONNUMERIC pone comillas solo en strings (cabecera)
+    submission.to_csv(filename, index=False, quoting=csv.QUOTE_NONNUMERIC)
     print(f"Submission guardada en: {filename}")
     return submission
 

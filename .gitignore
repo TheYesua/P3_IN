@@ -28,3 +28,20 @@ Thumbs.db
 # Archivos temporales
 *.tmp
 *.log
+
+# LaTeX - solo subir el PDF final
+docs/latex/*.aux
+docs/latex/*.fdb_latexmk
+docs/latex/*.fls
+docs/latex/*.log
+docs/latex/*.out
+docs/latex/*.synctex.gz
+docs/latex/*.toc
+docs/latex/*.bbl
+docs/latex/*.blg
+docs/latex/*.nav
+docs/latex/*.snm
+docs/latex/*.vrb
+# Mantener solo .tex y .pdf
+!docs/latex/*.tex
+!docs/latex/*.pdf

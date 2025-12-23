@@ -71,29 +71,29 @@ P3/
 ## 🗺️ Ruta de Trabajo
 
 ### Fase 1: Configuración y EDA (Análisis Exploratorio)
-- [ ] **1.1** Configurar entorno de trabajo y dependencias
-- [ ] **1.2** Cargar y explorar los datos
-- [ ] **1.3** Análisis de distribución de clases (balance/desbalance)
-- [ ] **1.4** Visualización de variables de fluorescencia
-- [ ] **1.5** Visualización de espectros hiperespectrales
-- [ ] **1.6** Análisis de correlaciones entre variables
-- [ ] **1.7** Detección de valores atípicos (outliers)
-- [ ] **1.8** Documentar hallazgos del EDA
+- [x] **1.1** Configurar entorno de trabajo y dependencias ✅
+- [x] **1.2** Cargar y explorar los datos ✅
+- [x] **1.3** Análisis de distribución de clases (balance/desbalance) ✅
+- [x] **1.4** Visualización de variables de fluorescencia ✅
+- [x] **1.5** Visualización de espectros hiperespectrales ✅
+- [x] **1.6** Análisis de correlaciones entre variables ✅
+- [x] **1.7** Detección de valores atípicos (outliers) ✅
+- [x] **1.8** Documentar hallazgos del EDA ✅
 
 ### Fase 2: Preprocesamiento de Datos
-- [ ] **2.1** Separar variables válidas de metadatos
-- [ ] **2.2** Análisis de valores faltantes
-- [ ] **2.3** Normalización/Estandarización de datos
-- [ ] **2.4** Reducción de dimensionalidad (PCA, selección de características)
-- [ ] **2.5** Técnicas de balanceo de clases (si aplica: SMOTE, undersampling)
-- [ ] **2.6** Crear pipeline de preprocesamiento reutilizable
+- [x] **2.1** Separar variables válidas de metadatos ✅
+- [x] **2.2** Análisis de valores faltantes ✅ (No hay valores faltantes)
+- [x] **2.3** Normalización/Estandarización de datos ✅ (StandardScaler implementado)
+- [x] **2.4** Reducción de dimensionalidad (PCA, selección de características) ✅ (PCA y SelectKBest implementados)
+- [ ] **2.5** Técnicas de balanceo de clases (si aplica: SMOTE, undersampling) - Pendiente evaluar necesidad
+- [x] **2.6** Crear pipeline de preprocesamiento reutilizable ✅ (src/preprocessing.py)
 
 ### Fase 3: Modelado Baseline
-- [ ] **3.1** Implementar validación cruzada estratificada
-- [ ] **3.2** Entrenar modelo baseline simple (Logistic Regression / Decision Tree)
-- [ ] **3.3** Evaluar con F1-score en validación
-- [ ] **3.4** Primera submission a Kaggle
-- [ ] **3.5** Documentar resultados en tabla de experimentos
+- [x] **3.1** Implementar validación cruzada estratificada ✅ (StratifiedKFold 5-fold)
+- [x] **3.2** Entrenar modelo baseline simple (Logistic Regression / Decision Tree) ✅
+- [x] **3.3** Evaluar con F1-score en validación ✅ (LogReg: 0.9388, RF: 0.9266, SVM: 0.9326)
+- [x] **3.4** Primera submission a Kaggle ✅ (submission_01_baseline_logisticregression)
+- [ ] **3.5** Documentar resultados en tabla de experimentos - Pendiente score Kaggle
 
 ### Fase 4: Experimentación con Modelos
 - [ ] **4.1** Random Forest
@@ -135,18 +135,27 @@ Ver archivo: [REGISTRO_EXPERIMENTOS.md](./REGISTRO_EXPERIMENTOS.md)
 
 ## 📝 Registro de Progreso
 
-### [Fecha: ____]
+### [Fecha: 23/12/2024]
 **Actividad realizada:**
-- 
+- Configuración inicial del proyecto y estructura de directorios
+- Implementación de módulos en `src/`: preprocessing.py, models.py, utils.py
+- Análisis Exploratorio de Datos completo (notebook 01_EDA.ipynb)
+- Entrenamiento y comparación de 5 modelos baseline
+- Generación de primera submission para Kaggle
 
 **Problemas encontrados:**
-- 
+- Datos con formato incorrecto: valores como '232 .25' (espacio antes del punto decimal)
+- Error al calcular correlaciones por tipos de datos incorrectos
 
 **Soluciones aplicadas:**
-- 
+- Implementación de función `clean_numeric_columns()` en preprocessing.py
+- Integración de limpieza automática en `load_data()`
 
 **Próximos pasos:**
-- 
+- Subir submission a Kaggle y registrar score
+- Experimentar con PCA + diferentes modelos
+- Probar XGBoost/LightGBM
+- Optimización de hiperparámetros
 
 ---
 
@@ -201,4 +210,4 @@ tensorflow, pytorch
 
 ---
 
-*Última actualización: [Fecha de inicio]*
+*Última actualización: 23/12/2024*
