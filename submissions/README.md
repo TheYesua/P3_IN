@@ -22,7 +22,7 @@ Donde:
 
 | Archivo | Experimento | Fecha | Score Kaggle |
 |---------|-------------|-------|--------------|
-| `submission_01_baseline_logisticregression_20251223_1856.csv` | 01 - Baseline | 23/12/2024 | [PENDIENTE] |
+| `submission_01_baseline_logisticregression_20251223_1856.csv` | 01 - Baseline | 23/12/2024 | **0.8478** |
 
 ---
 
@@ -33,7 +33,7 @@ Donde:
 - **Experimento**: 01 - Baseline con Logistic Regression
 - **Fecha de generación**: 23/12/2024 18:56
 - **Score en CV (train)**: 0.9388
-- **Score en Kaggle**: [PENDIENTE - Subir a Kaggle]
+- **Score en Kaggle**: **0.8478**
 - **Modelo**: LogisticRegression(max_iter=1000, random_state=42)
 - **Preprocesado**: StandardScaler
 - **Número de predicciones**: 143

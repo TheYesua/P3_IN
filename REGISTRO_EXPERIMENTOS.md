@@ -4,7 +4,7 @@
 
 | Nº | Fecha/Hora | Posición | Score Train | Score Kaggle | Preprocesado | Algoritmo | Parámetros | Observaciones |
 |----|------------|----------|-------------|--------------|--------------|-----------|------------|---------------|
-| 01 | 23/12/2024 18:56 | [PENDIENTE] | 0.9388 | [PENDIENTE] | StandardScaler | LogisticRegression | max_iter=1000 | Mejor modelo en CV |
+| 01 | 23/12/2024 18:56 | -- | 0.8278 | **0.8478** | StandardScaler | LogisticRegression | max_iter=1000 | Mejor modelo en CV |
 | 02 | | | | | | | | |
 | 03 | | | | | | | | |
 | 04 | | | | | | | | |
@@ -21,9 +21,9 @@
 
 ### Experimento 01 - Baseline con Logistic Regression
 - **Fecha y hora de subida**: 23/12/2024 18:56
-- **Posición en Kaggle**: [PENDIENTE - Subir a Kaggle]
-- **Score en entrenamiento (CV)**: 0.9388 (± 0.0254)
-- **Score en Kaggle (test)**: [PENDIENTE - Subir a Kaggle]
+- **Posición en Kaggle**: --
+- **Score en entrenamiento (CV)**: 0.8278 (± 0.0232)
+- **Score en Kaggle (test)**: **0.8478**
 - **Preprocesado**:
   - Normalización: StandardScaler
   - Reducción dimensionalidad: Ninguna (todas las features)
