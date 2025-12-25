@@ -29,6 +29,9 @@ Thumbs.db
 *.tmp
 *.log
 
+# Markdown - no subir archivos .md
+*.md
+
 # LaTeX - solo subir el PDF final
 docs/latex/*.aux
 docs/latex/*.fdb_latexmk

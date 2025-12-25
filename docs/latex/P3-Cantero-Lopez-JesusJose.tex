@@ -300,14 +300,24 @@ La siguiente tabla contiene el registro obligatorio de todas las submissions rea
 \begin{table}[H]
     \centering
     \footnotesize
-    \begin{tabular}{|c|c|c|c|c|p{2.2cm}|p{2.5cm}|p{2.5cm}|}
+    \begin{tabular}{|c|c|c|c|c|p{2cm}|p{2.2cm}|p{2.2cm}|}
         \hline
         \textbf{Nº} & \textbf{Fecha/Hora} & \textbf{Pos.} & \textbf{F1 Train} & \textbf{F1 Kaggle} & \textbf{Preprocesado} & \textbf{Algoritmo} & \textbf{Parámetros} \\
         \hline
         01 & 23/12/2025 20:30 & 1 & 0.8278 & 0.8478 & StandardScaler & LogisticRegression & max\_iter=1000, random\_state=42 \\
         \hline
+        02 & 25/12/2025 18:46 & -- & 0.7368 & [PENDIENTE] & StandardScaler+PCA(3) & LogisticRegression & max\_iter=1000, random\_state=42 \\
+        \hline
+        03 & 25/12/2025 18:47 & -- & 0.7268 & [PENDIENTE] & StandardScaler+PCA(7) & XGBoost & n\_estimators=100, max\_depth=6 \\
+        \hline
+        04 & 25/12/2025 18:46 & -- & 0.6802 & [PENDIENTE] & StandardScaler+SKB(50) & RandomForest & n\_estimators=100, class\_weight='balanced' \\
+        \hline
+        05 & 25/12/2025 18:48 & -- & 0.7472 & [PENDIENTE] & StandardScaler & XGBoost & n\_estimators=100, max\_depth=6 \\
+        \hline
+        06 & 25/12/2025 18:48 & -- & 0.7232 & [PENDIENTE] & StandardScaler & LightGBM & n\_estimators=100, max\_depth=6 \\
+        \hline
     \end{tabular}
-    \caption{Registro obligatorio de submissions a Kaggle.}
+    \caption{Registro obligatorio de submissions a Kaggle - Fase 1 completada.}
     \label{tab:experimentos}
 \end{table}
 
@@ -329,6 +339,58 @@ La siguiente tabla contiene el registro obligatorio de todas las submissions rea
     \item \textbf{Parámetros}: \texttt{max\_iter=1000, random\_state=42}
     \item \textbf{Observaciones}: Modelo baseline. El score en Kaggle (0.8478) supera ligeramente al score de validación cruzada (0.8278), indicando buena generalización.
 \end{itemize}
+
+\subsection{Resultados de la Fase 1: Experimentación Inicial}
+
+Se implementaron 6 experimentos adicionales explorando diferentes técnicas de preprocesamiento y algoritmos avanzados. Los resultados en validación cruzada se resumen en la Figura \ref{fig:comparacion_fase1}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../graficas/comparacion_modelos_fase1.png}
+    \caption{Comparación de F1-scores en validación cruzada para todos los experimentos de la Fase 1.}
+    \label{fig:comparacion_fase1}
+\end{figure}
+
+\subsubsection{Análisis de Reducción de Dimensionalidad}
+
+El análisis con PCA reveló que reducir a 3 componentes disminuye significativamente el rendimiento (F1 = 0.7368), mientras que con 7 componentes se obtiene un resultado similar (F1 = 0.7268). Esto sugiere que aunque PCA captura la varianza principal, se pierde información discriminativa importante para la clasificación.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../graficas/pca_varianza_explicada.png}
+    \caption{Varianza explicada por componentes principales.}
+    \label{fig:pca_varianza}
+\end{figure}
+
+\subsubsection{Modelos Avanzados}
+
+Los modelos de boosting (XGBoost y LightGBM) no superaron al baseline en validación cruzada:
+\begin{itemize}
+    \item \textbf{XGBoost}: F1 = 0.7472 ($\pm$ 0.0520)
+    \item \textbf{LightGBM}: F1 = 0.7232 ($\pm$ 0.0556)
+\end{itemize}
+
+La alta desviación estándar indica inestabilidad en estos modelos con los parámetros por defecto, sugiriendo la necesidad de optimización de hiperparámetros.
+
+\subsubsection{Feature Importance}
+
+El análisis de importancia de features con XGBoost (Figura \ref{fig:feature_importance}) muestra que las variables espectrales en rangos específicos son más discriminatorias que las de fluorescencia.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../graficas/feature_importance_xgboost.png}
+    \caption{Top 20 features más importantes según XGBoost.}
+    \label{fig:feature_importance}
+\end{figure}
+
+\subsubsection{Conclusiones de la Fase 1}
+
+\begin{enumerate}
+    \item \textbf{Logistic Regression mantiene el mejor rendimiento} con un F1-score de 0.8278 en validación cruzada.
+    \item \textbf{La reducción de dimensionalidad con PCA no mejora los resultados}, posiblemente por pérdida de información discriminativa.
+    \item \textbf{Los modelos avanzados requieren optimización} de hiperparámetros para superar al baseline.
+    \item \textbf{SelectKBest con 50 features} obtiene el peor rendimiento (0.6802), indicando que se eliminó información importante.
+\end{enumerate}
 
 % 6. Conclusiones
 \section{Conclusiones y Trabajo Futuro}
