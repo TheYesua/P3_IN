@@ -300,25 +300,49 @@ La siguiente tabla contiene el registro obligatorio de todas las submissions rea
 \begin{table}[H]
     \centering
     \footnotesize
-    \begin{tabular}{|c|c|c|c|c|p{2cm}|p{2.2cm}|p{2.2cm}|}
+    \begin{tabular}{|c|c|c|c|c|}
         \hline
-        \textbf{Nº} & \textbf{Fecha/Hora} & \textbf{Pos.} & \textbf{F1 Train} & \textbf{F1 Kaggle} & \textbf{Preprocesado} & \textbf{Algoritmo} & \textbf{Parámetros} \\
+        \textbf{Nº} & \textbf{Fecha/Hora} & \textbf{Pos.} & \textbf{F1 Train} & \textbf{F1 Kaggle} \\
         \hline
-        01 & 23/12/2025 20:30 & 1 & 0.8278 & 0.8478 & StandardScaler & LogisticRegression & max\_iter=1000, random\_state=42 \\
+        01 & 23/12/2025 20:30 & 1 & 0.8278 & 0.8478 \\
         \hline
-        02 & 25/12/2025 18:46 & -- & 0.7368 & [PENDIENTE] & StandardScaler+PCA(3) & LogisticRegression & max\_iter=1000, random\_state=42 \\
+        02 & 25/12/2025 18:46 & -- & 0.7368 & [PENDIENTE] \\
         \hline
-        03 & 25/12/2025 18:47 & -- & 0.7268 & [PENDIENTE] & StandardScaler+PCA(7) & XGBoost & n\_estimators=100, max\_depth=6 \\
+        03 & 25/12/2025 18:47 & -- & 0.7268 & [PENDIENTE] \\
         \hline
-        04 & 25/12/2025 18:46 & -- & 0.6802 & [PENDIENTE] & StandardScaler+SKB(50) & RandomForest & n\_estimators=100, class\_weight='balanced' \\
+        04 & 25/12/2025 18:46 & -- & 0.6802 & [PENDIENTE] \\
         \hline
-        05 & 25/12/2025 18:48 & -- & 0.7472 & [PENDIENTE] & StandardScaler & XGBoost & n\_estimators=100, max\_depth=6 \\
+        05 & 25/12/2025 18:48 & -- & 0.7472 & [PENDIENTE] \\
         \hline
-        06 & 25/12/2025 18:48 & -- & 0.7232 & [PENDIENTE] & StandardScaler & LightGBM & n\_estimators=100, max\_depth=6 \\
+        06 & 25/12/2025 18:48 & -- & 0.7232 & [PENDIENTE] \\
         \hline
     \end{tabular}
-    \caption{Registro obligatorio de submissions a Kaggle - Fase 1 completada.}
+    \caption{Registro obligatorio de submissions a Kaggle - Fases 1 y 2 completadas.}
     \label{tab:experimentos}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \footnotesize
+    \begin{tabular}{|c|p{3cm}|p{2.5cm}|p{4cm}|}
+        \hline
+        \textbf{Nº} & \textbf{Preprocesado} & \textbf{Algoritmo} & \textbf{Parámetros} \\
+        \hline
+        01 & StandardScaler & LogisticRegression & max\_iter=1000, random\_state=42 \\
+        \hline
+        02 & StandardScaler+PCA(3) & LogisticRegression & max\_iter=1000, random\_state=42 \\
+        \hline
+        03 & StandardScaler+PCA(7) & XGBoost & n\_estimators=100, max\_depth=6 \\
+        \hline
+        04 & StandardScaler+SKB(50) & RandomForest & n\_estimators=100, class\_weight='balanced' \\
+        \hline
+        05 & StandardScaler & XGBoost & n\_estimators=100, max\_depth=6 \\
+        \hline
+        06 & StandardScaler & LightGBM & n\_estimators=100, max\_depth=6 \\
+        \hline
+    \end{tabular}
+    \caption{Detalle de preprocesado, algoritmos y parámetros por experimento.}
+    \label{tab:experimentos_detalle}
 \end{table}
 
 \subsection{Detalle del Experimento 01}
