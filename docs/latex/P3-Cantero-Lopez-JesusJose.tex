@@ -340,20 +340,18 @@ La siguiente tabla contiene el registro obligatorio de todas las submissions rea
     \item \textbf{Observaciones}: Modelo baseline. El score en Kaggle (0.8478) supera ligeramente al score de validación cruzada (0.8278), indicando buena generalización.
 \end{itemize}
 
-\subsection{Resultados de la Fase 1: Experimentación Inicial}
+\subsection{Fase 1: Reducción de Dimensionalidad}
 
-Se implementaron 6 experimentos adicionales explorando diferentes técnicas de preprocesamiento y algoritmos avanzados. Los resultados en validación cruzada se resumen en la Figura \ref{fig:comparacion_fase1}.
+El objetivo de esta fase fue evaluar el impacto de diferentes técnicas de reducción de dimensionalidad en el rendimiento del modelo. Se implementaron tres enfoques principales:
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../graficas/comparacion_modelos_fase1.png}
-    \caption{Comparación de F1-scores en validación cruzada para todos los experimentos de la Fase 1.}
-    \label{fig:comparacion_fase1}
-\end{figure}
+\subsubsection{Experimento 02: PCA(3) + Logistic Regression}
 
-\subsubsection{Análisis de Reducción de Dimensionalidad}
+Se aplicó Análisis de Componentes Principales reduciendo a 3 componentes, que capturan el 95\% de la varianza total. Los resultados mostraron una disminución significativa en el rendimiento:
 
-El análisis con PCA reveló que reducir a 3 componentes disminuye significativamente el rendimiento (F1 = 0.7368), mientras que con 7 componentes se obtiene un resultado similar (F1 = 0.7268). Esto sugiere que aunque PCA captura la varianza principal, se pierde información discriminativa importante para la clasificación.
+\begin{itemize}
+    \item \textbf{F1-score CV}: 0.7368 ($\pm$ 0.0020)
+    \item \textbf{Observación}: Aunque se retiene la mayor parte de la varianza, se pierde información discriminativa crucial para la clasificación.
+\end{itemize}
 
 \begin{figure}[H]
     \centering
@@ -362,19 +360,68 @@ El análisis con PCA reveló que reducir a 3 componentes disminuye significativa
     \label{fig:pca_varianza}
 \end{figure}
 
-\subsubsection{Modelos Avanzados}
+\subsubsection{Experimento 03: PCA(7) + XGBoost}
 
-Los modelos de boosting (XGBoost y LightGBM) no superaron al baseline en validación cruzada:
+Se evaluó PCA con 7 componentes (99\% de varianza) combinado con XGBoost:
+
 \begin{itemize}
-    \item \textbf{XGBoost}: F1 = 0.7472 ($\pm$ 0.0520)
-    \item \textbf{LightGBM}: F1 = 0.7232 ($\pm$ 0.0556)
+    \item \textbf{F1-score CV}: 0.7268 ($\pm$ 0.0508)
+    \item \textbf{Observación}: Aumentar a 7 componentes no mejora significativamente respecto a PCA(3), y la alta varianza indica inestabilidad.
 \end{itemize}
 
-La alta desviación estándar indica inestabilidad en estos modelos con los parámetros por defecto, sugiriendo la necesidad de optimización de hiperparámetros.
+\subsubsection{Experimento 04: SelectKBest(50) + Random Forest}
+
+Se seleccionaron las 50 mejores features mediante prueba F de ANOVA:
+
+\begin{itemize}
+    \item \textbf{F1-score CV}: 0.6802 ($\pm$ 0.0544)
+    \item \textbf{Observación}: Selección agresiva de features elimina información importante, resultando en el peor rendimiento.
+\end{itemize}
+
+\subsubsection{Conclusiones Fase 1}
+
+\begin{enumerate}
+    \item \textbf{La reducción de dimensionalidad no beneficia el rendimiento} en este problema específico.
+    \item \textbf{PCA(3) es la mejor opción} si se requiere reducción, pero aún inferior al baseline.
+    \item \textbf{SelectKBest es demasiado agresivo} con k=50 para este dataset.
+    \item \textbf{Se recomienda mantener todas las features} para los modelos avanzados.
+\end{enumerate}
+
+\clearpage
+\subsection{Fase 2: Modelos Avanzados}
+
+En esta fase se implementaron algoritmos de boosting state-of-the-art para comparar con el baseline de Logistic Regression.
+
+\subsubsection{Experimento 05: XGBoost Baseline}
+
+XGBoost con parámetros por defecto sobre todas las features:
+
+\begin{itemize}
+    \item \textbf{F1-score CV}: 0.7472 ($\pm$ 0.0520)
+    \item \textbf{Parámetros}: n\_estimators=100, max\_depth=6, learning\_rate=0.1
+    \item \textbf{Observación}: No supera al baseline, alta varianza indica necesidad de optimización.
+\end{itemize}
+
+\subsubsection{Experimento 06: LightGBM Baseline}
+
+LightGBM como alternativa eficiente a XGBoost:
+
+\begin{itemize}
+    \item \textbf{F1-score CV}: 0.7232 ($\pm$ 0.0556)
+    \item \textbf{Parámetros}: n\_estimators=100, max\_depth=6, learning\_rate=0.1
+    \item \textbf{Observación}: Rendimiento similar a XGBoost, también requiere optimización.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{../graficas/comparacion_modelos_fase1.png}
+    \caption{Comparación de F1-scores en validación cruzada para todos los experimentos.}
+    \label{fig:comparacion_fase1}
+\end{figure}
 
 \subsubsection{Feature Importance}
 
-El análisis de importancia de features con XGBoost (Figura \ref{fig:feature_importance}) muestra que las variables espectrales en rangos específicos son más discriminatorias que las de fluorescencia.
+El análisis con XGBoost (Figura \ref{fig:feature_importance}) revela que las variables espectrales en rangos específicos son más importantes que las de fluorescencia.
 
 \begin{figure}[H]
     \centering
@@ -383,13 +430,13 @@ El análisis de importancia de features con XGBoost (Figura \ref{fig:feature_imp
     \label{fig:feature_importance}
 \end{figure}
 
-\subsubsection{Conclusiones de la Fase 1}
+\subsubsection{Conclusiones Fase 2}
 
 \begin{enumerate}
-    \item \textbf{Logistic Regression mantiene el mejor rendimiento} con un F1-score de 0.8278 en validación cruzada.
-    \item \textbf{La reducción de dimensionalidad con PCA no mejora los resultados}, posiblemente por pérdida de información discriminativa.
-    \item \textbf{Los modelos avanzados requieren optimización} de hiperparámetros para superar al baseline.
-    \item \textbf{SelectKBest con 50 features} obtiene el peor rendimiento (0.6802), indicando que se eliminó información importante.
+    \item \textbf{Logistic Regression sigue siendo el mejor modelo} con F1 = 0.8278.
+    \item \textbf{XGBoost y LightGBM requieren optimización} de hiperparámetros para competir.
+    \item \textbf{La alta varianza} en modelos avanzados sugiere overfitting con parámetros por defecto.
+    \item \textbf{Las features espectrales son más discriminativas} que las de fluorescencia.
 \end{enumerate}
 
 % 6. Conclusiones
