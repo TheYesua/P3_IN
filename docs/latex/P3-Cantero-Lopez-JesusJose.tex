@@ -9,6 +9,7 @@
 \usepackage{booktabs}
 \usepackage{amsmath}
 \usepackage{caption}
+\usepackage{xcolor}
 
 \usepackage{listings}
 \lstset{
@@ -304,20 +305,20 @@ La siguiente tabla contiene el registro obligatorio de todas las submissions rea
         \hline
         \textbf{Nº} & \textbf{Fecha/Hora} & \textbf{Pos.} & \textbf{F1 Train} & \textbf{F1 Kaggle} & \textbf{Preprocesado} & \textbf{Algoritmo} & \textbf{Parámetros} \\
         \hline
-        01 & 23/12/2025 20:30 & 1 & 0.8278 & 0.8478 & StandardScaler & LogisticRegression & max\_iter=1000, random\_state=42 \\
+        01 & 23/12/2025 20:30 & 1 & 0.8278 & 0.84782 & StandardScaler & LogisticRegression & max\_iter=1000, random\_state=42 \\
         \hline
-        02 & 25/12/2025 18:46 & -- & 0.7368 & [PENDIENTE] & 
-        \parbox[t]{2.3cm}{StandardScaler+PCA(3)} & LogisticRegression & max\_iter=1000, random\_state=42 \\
+        02 & 25/12/2025 18:46 & -- & 0.7368 & 0.74561 & 
+        \parbox[t]{2.3cm}{StandardScaler + PCA(3)} & LogisticRegression & max\_iter=1000, random\_state=42 \\
         \hline
-        03 & 25/12/2025 18:47 & -- & 0.7268 & [PENDIENTE] & 
-        \parbox[t]{2.3cm}{StandardScaler+PCA(7)} & XGBoost & n\_estimators=100, max\_depth=6 \\
+        03 & 25/12/2025 18:47 & -- & 0.7268 & 0.69364 & 
+        \parbox[t]{2.3cm}{StandardScaler + PCA(7)} & XGBoost & n\_estimators=100, max\_depth=6 \\
         \hline
-        04 & 25/12/2025 18:46 & -- & 0.6802 & [PENDIENTE] & 
-        \parbox[t]{2.3cm}{StandardScaler+SKB(50)} & RandomForest & n\_estimators=100, class\_weight='balanced' \\
+        04 & 25/12/2025 18:46 & -- & 0.6802 & 0.59459 & 
+        \parbox[t]{2.3cm}{StandardScaler + SKB(50)} & RandomForest & n\_estimators=100, class\_weight='balanced' \\
         \hline
-        05 & 25/12/2025 18:48 & -- & 0.7472 & [PENDIENTE] & StandardScaler & XGBoost & n\_estimators=100, max\_depth=6 \\
+        05 & 25/12/2025 18:48 & -- & 0.7472 & 0.70454 & StandardScaler & XGBoost & n\_estimators=100, max\_depth=6 \\
         \hline
-        06 & 25/12/2025 18:48 & -- & 0.7232 & [PENDIENTE] & StandardScaler & LightGBM & n\_estimators=100, max\_depth=6 \\
+        06 & 25/12/2025 18:48 & -- & 0.7232 & 0.73033 & StandardScaler & LightGBM & n\_estimators=100, max\_depth=6 \\
         \hline
     \end{tabular}
     \caption{Registro obligatorio de submissions a Kaggle - Fases 1 y 2 completadas.}
@@ -422,6 +423,61 @@ LightGBM como alternativa eficiente a XGBoost:
     \label{fig:comparacion_fase1}
 \end{figure}
 
+\subsubsection{Análisis de Resultados Kaggle}
+
+Los resultados obtenidos en la competición Kaggle (Tabla \ref{tab:experimentos}) revelan patrones importantes sobre el comportamiento de los modelos en datos de test:
+
+\begin{itemize}
+    \item \textbf{Logistic Regression (Exp 01):} F1-test = 0.84782
+    \begin{itemize}
+        \item \textcolor{green}{Mejor resultado global}, posicionándose en 1º lugar
+        \item Mejora generalización: F1-test (0.84782) $>$ F1-CV (0.8278)
+        \item Modelo robusto y estable con parámetros por defecto
+    \end{itemize}
+    
+    \item \textbf{PCA(3) + Logistic Regression (Exp 02):} F1-test = 0.74561
+    \begin{itemize}
+        \item \textcolor{orange}{Segundo mejor resultado}, pero 12\% inferior al baseline
+        \item Ligera mejora generalización: F1-test (0.74561) $>$ F1-CV (0.7368)
+        \item Confirma que PCA(3) pierde información discriminativa
+    \end{itemize}
+    
+    \item \textbf{LightGBM (Exp 06):} F1-test = 0.73033
+    \begin{itemize}
+        \item \textcolor{blue}{Tercer puesto}, mejor que XGBoost en test
+        \item Mejor generalización: F1-test (0.73033) $>$ F1-CV (0.7232)
+        \item Potencial con optimización de hiperparámetros
+    \end{itemize}
+    
+    \item \textbf{XGBoost (Exp 05):} F1-test = 0.70454
+    \begin{itemize}
+        \item \textcolor{red}{Peor generalización}: F1-test (0.70454) $<$ F1-CV (0.7472)
+        \item Overfitting evidente con parámetros por defecto
+        \item Requiere optimización urgente de hiperparámetros
+    \end{itemize}
+    
+    \item \textbf{PCA(7) + XGBoost (Exp 03):} F1-test = 0.69364
+    \begin{itemize}
+        \item Peor que PCA(3), confirmando que más componentes no ayudan
+        \item Combinación subóptima de reducción + modelo complejo
+    \end{itemize}
+    
+    \item \textbf{SelectKBest(50) + Random Forest (Exp 04):} F1-test = 0.59459
+    \begin{itemize}
+        \item \textcolor{red}{Peor resultado global}, 30\% inferior al baseline
+        \item Selección agresiva elimina información crítica
+        \item Random Forest no se beneficia de features reducidas
+    \end{itemize}
+\end{itemize}
+
+\textbf{Observaciones Clave:}
+\begin{enumerate}
+    \item \textbf{Simplicidad vs Complejidad:} Logistic Regression supera a modelos complejos, demostrando que para este problema un modelo lineal bien regularizado es suficiente.
+    \item \textbf{Reducción Dimensional:} Ninguna técnica de reducción mejora el baseline, sugiriendo que las 304 features contienen información única y complementaria.
+    \item \textbf{Generalización:} Los modelos más simples (LR, LightGBM) generalizan mejor, mientras que XGBoost sufre overfitting.
+    \item \textbf{Gap Train-Test:} El mayor gap se observa en XGBoost (0.043), indicando alta varianza y necesidad de regularización.
+\end{enumerate}
+
 \subsubsection{Feature Importance}
 
 El análisis con XGBoost (Figura \ref{fig:feature_importance}) revela que las variables espectrales en rangos específicos son más importantes que las de fluorescencia.
@@ -436,14 +492,15 @@ El análisis con XGBoost (Figura \ref{fig:feature_importance}) revela que las va
 \subsubsection{Conclusiones Fase 2}
 
 \begin{enumerate}
-    \item \textbf{Logistic Regression sigue siendo el mejor modelo} con F1 = 0.8278.
-    \item \textbf{XGBoost y LightGBM requieren optimización} de hiperparámetros para competir.
-    \item \textbf{La alta varianza} en modelos avanzados sugiere overfitting con parámetros por defecto.
-    \item \textbf{Las features espectrales son más discriminativas} que las de fluorescencia.
+    \item \textbf{Logistic Regression sigue siendo el mejor modelo} con F1-test = 0.84782 (1º en Kaggle).
+    \item \textbf{LightGBM muestra potencial} con mejor generalización que XGBoost (F1-test = 0.73033).
+    \item \textbf{XGBoost requiere optimización crítica} debido a overfitting evidente (gap de 0.043).
+    \item \textbf{Las features espectrales son más discriminativas} que las de fluorescencia según análisis de importancia.
+    \item \textbf{Modelos complejos no garantizan mejor rendimiento} en este problema específico.
 \end{enumerate}
 
 % 6. Conclusiones
-\section{Conclusiones y Trabajo Futuro}
+\section{Conclusiones}
 
 \subsection{Conclusiones del EDA}
 
@@ -454,15 +511,25 @@ El análisis con XGBoost (Figura \ref{fig:feature_importance}) revela que las va
     \item No hay valores faltantes y los outliers son escasos (<3\%).
 \end{enumerate}
 
-\subsection{Trabajo Futuro}
+\subsection{Conclusiones de Modelos}
 
-\begin{itemize}
-    \item Experimentar con PCA (3-7 componentes) para reducir dimensionalidad
-    \item Probar XGBoost y LightGBM
-    \item Optimización de hiperparámetros con Optuna
-    \item Técnicas de ensemble (Voting, Stacking)
-    \item Selección de features con SelectKBest
-\end{itemize}
+\begin{enumerate}
+    \item \textbf{Logistic Regression es el modelo ganador} con F1-test = 0.84782, alcanzando el 1º lugar en Kaggle y demostrando que la simplicidad supera a la complejidad.
+    \item \textbf{La reducción dimensional empeora el rendimiento}: PCA(3) reduce el F1 en 12\% (0.74561), confirmando que todas las 304 features aportan información única.
+    \item \textbf{LightGBM muestra el mejor potencial entre modelos complejos} con F1-test = 0.73033 y buena generalización, superando a XGBoost.
+    \item \textbf{XGBoost sufre overfitting severo} con gap de 0.043 entre CV y test, requiriendo optimización urgente de hiperparámetros.
+    \item \textbf{SelectKBest es contraproducente}: eliminar features reduce drásticamente el rendimiento (F1 = 0.59459, 30\% inferior al baseline).
+    \item \textbf{Las features espectrales son más discriminativas} que las de fluorescencia según análisis de importancia.
+\end{enumerate}
+
+\subsection{Lecciones Aprendidas}
+
+\begin{enumerate}
+    \item Para problemas de clasificación con datos espectroscópicos, modelos lineales bien regularizados pueden superar a ensembles complejos.
+    \item La reducción dimensional no siempre mejora el rendimiento; depende de la naturaleza discriminativa de las features.
+    \item La generalización es más importante que el rendimiento en validación cruzada para competiciones Kaggle.
+    \item Es fundamental evaluar múltiples enfoques antes de asumir que modelos complejos son superiores.
+\end{enumerate}
 
 \clearpage
 % 7. Estructura de la Entrega
