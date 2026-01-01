@@ -52,17 +52,17 @@
 \thispagestyle{empty}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{../capturas/leaderboard_231225.png}
-    \caption*{\textbf{Captura del Leaderboard de Kaggle} -- Fecha: 23/12/2025}
+    \includegraphics[width=\textwidth]{../capturas/leaderboard_01012026.png}
+    \caption*{\textbf{Captura del Leaderboard de Kaggle} -- Fecha: 01/01/2026}
 \end{figure}
 \vspace{1cm}
 \begin{center}
     \textbf{Resumen de participación:}\\[0.5cm]
     \begin{tabular}{ll}
         \textbf{Usuario:} & JesusCantero\_UGR\_IN \\
-        \textbf{Posición actual:} & 1 de 2 \\
+        \textbf{Posición actual:} & 2 de 5 \\
         \textbf{Mejor Score:} & 0.84782 \\
-        \textbf{Número de entries:} & 6 \\
+        \textbf{Número de entries:} & 10 \\
     \end{tabular}
 \end{center}
 \clearpage
@@ -261,18 +261,18 @@ Se compararon 5 algoritmos de clasificación con parámetros por defecto:
         \toprule
         \textbf{Modelo} & \textbf{F1-Score (CV)} & \textbf{Desv. Std} \\
         \midrule
-        Logistic Regression & \textbf{0.9388} & 0.0254 \\
-        SVM (RBF) & 0.9326 & -- \\
-        Random Forest & 0.9266 & -- \\
-        Gradient Boosting & 0.9203 & -- \\
-        KNN (k=5) & 0.8943 & -- \\
+        Logistic Regression & \textbf{0.8278} & 0.0232 \\
+        SVM (RBF) & 0.7624 & 0.0397 \\
+        Random Forest & 0.7530 & 0.0510 \\
+        Gradient Boosting & 0.7371 & 0.0314 \\
+        KNN (k=5) & 0.6558 & 0.0681 \\
         \bottomrule
     \end{tabular}
     \caption{Comparación de modelos baseline con StandardScaler.}
     \label{tab:baseline}
 \end{table}
 
-\textbf{Resultado}: Logistic Regression obtuvo el mejor F1-score en validación cruzada (0.9388), siendo seleccionado para la primera submission.
+\textbf{Resultado}: Logistic Regression obtuvo el mejor F1-score en validación cruzada (0.8278), siendo seleccionado para la primera submission.
 
 \subsection{Configuración del Mejor Modelo}
 
@@ -301,28 +301,33 @@ La siguiente tabla contiene el registro obligatorio de todas las submissions rea
 
 \begin{table}[H]
     \centering
-    \footnotesize
-    \begin{tabular}{|c|c|c|c|c|p{2.5cm}|p{2.5cm}|p{3cm}|}
+    \scriptsize
+    \begin{tabular}{|c|c|c|c|c|p{1.8cm}|p{1.5cm}|p{2.2cm}|}
         \hline
-        \textbf{Nº} & \textbf{Fecha/Hora} & \textbf{Pos.} & \textbf{F1 Train} & \textbf{F1 Kaggle} & \textbf{Preprocesado} & \textbf{Algoritmo} & \textbf{Parámetros} \\
+        \textbf{Nº} & \textbf{Fecha} & \textbf{Pos.} & \textbf{F1 CV} & \textbf{F1 Kaggle} & \textbf{Preprocesado} & \textbf{Algoritmo} & \textbf{Descripción} \\
         \hline
-        01 & 23/12/2025 20:30 & 1 & 0.8278 & 0.84782 & StandardScaler & LogisticRegression & max\_iter=1000, random\_state=42 \\
+        -- & 21/12/25 & -- & -- & 0.00000 & -- & -- & Prueba (sample) \\
         \hline
-        02 & 25/12/2025 18:46 & -- & 0.7368 & 0.74561 & 
-        \parbox[t]{2.3cm}{StandardScaler + PCA(3)} & LogisticRegression & max\_iter=1000, random\_state=42 \\
+        01a & 23/12/25 & 1 & 0.8278 & \textbf{0.84782} & Scaler & LR & Baseline (seed=42) \\
         \hline
-        03 & 25/12/2025 18:47 & -- & 0.7268 & 0.69364 & 
-        \parbox[t]{2.3cm}{StandardScaler + PCA(7)} & XGBoost & n\_estimators=100, max\_depth=6 \\
+        01b & 23/12/25 & 1 & $\sim$0.83 & \textbf{0.84782} & Scaler & LR & Baseline (otra seed) \\
         \hline
-        04 & 25/12/2025 18:46 & -- & 0.6802 & 0.59459 & 
-        \parbox[t]{2.3cm}{StandardScaler + SKB(50)} & RandomForest & n\_estimators=100, class\_weight='balanced' \\
+        02 & 25/12/25 & -- & 0.7368 & 0.74561 & Scaler+PCA(3) & LR & 95\% varianza \\
         \hline
-        05 & 25/12/2025 18:48 & -- & 0.7472 & 0.70454 & StandardScaler & XGBoost & n\_estimators=100, max\_depth=6 \\
+        03 & 25/12/25 & -- & 0.7268 & 0.69364 & Scaler+PCA(7) & XGBoost & 99\% varianza \\
         \hline
-        06 & 25/12/2025 18:48 & -- & 0.7232 & 0.73033 & StandardScaler & LightGBM & n\_estimators=100, max\_depth=6 \\
+        04 & 25/12/25 & -- & 0.6802 & 0.59459 & Scaler+SKB(50) & RF & ANOVA F-value \\
+        \hline
+        05 & 25/12/25 & -- & 0.7472 & 0.70454 & Scaler & XGBoost & est=100, d=6 \\
+        \hline
+        06 & 25/12/25 & -- & 0.7232 & 0.73033 & Scaler & LightGBM & est=100, d=6 \\
+        \hline
+        15 & 01/01/26 & 2 & 0.8518 & 0.82485 & Scaler & Ridge & $\alpha$=1.0 \\
+        \hline
+        19 & 01/01/26 & 2 & 0.8517 & 0.84491 & Spec+RFE(100) & LR & 100 features \\
         \hline
     \end{tabular}
-    \caption{Registro obligatorio de submissions a Kaggle - Fases 1 y 2 completadas.}
+    \caption{Registro completo de 10 submissions a Kaggle. LR=LogisticRegression, RF=RandomForest, Scaler=StandardScaler, SKB=SelectKBest, est=n\_estimators, d=max\_depth, Spec=Spectral.}
     \label{tab:experimentos}
 \end{table}
 
@@ -332,7 +337,7 @@ La siguiente tabla contiene el registro obligatorio de todas las submissions rea
     \item \textbf{Fecha y hora de subida}: 23/12/2025 20:30
     \item \textbf{Posición en el momento}: 1 de 2
     \item \textbf{Score en entrenamiento (CV 5-fold)}: 0.8278 ($\pm$ 0.0232)
-    \item \textbf{Score en Kaggle (test)}: 0.8478
+    \item \textbf{Score en Kaggle (test)}: 0.84782
     \item \textbf{Preprocesado}:
     \begin{itemize}
         \item Limpieza de valores numéricos con espacios
@@ -342,7 +347,7 @@ La siguiente tabla contiene el registro obligatorio de todas las submissions rea
     \end{itemize}
     \item \textbf{Algoritmo}: Logistic Regression
     \item \textbf{Parámetros}: \texttt{max\_iter=1000, random\_state=42}
-    \item \textbf{Observaciones}: Modelo baseline. El score en Kaggle (0.8478) supera ligeramente al score de validación cruzada (0.8278), indicando buena generalización.
+    \item \textbf{Observaciones}: Modelo baseline. El score en Kaggle (0.84782) supera ligeramente al score de validación cruzada (0.8278), indicando buena generalización.
 \end{itemize}
 
 \subsection{Fase 1: Reducción de Dimensionalidad}
@@ -431,7 +436,7 @@ Los resultados obtenidos en la competición Kaggle (Tabla \ref{tab:experimentos}
 \begin{itemize}
     \item \textbf{Logistic Regression (Exp 01):} F1-test = 0.84782
     \begin{itemize}
-        \item \textcolor{green}{Mejor resultado global}, posicionándose en 1º lugar
+        \item \textcolor{green}{Mejor resultado del equipo}, alcanzando el 2º lugar en el leaderboard
         \item Mejora generalización: F1-test (0.84782) $>$ F1-CV (0.8278)
         \item Modelo robusto y estable con parámetros por defecto
     \end{itemize}
@@ -493,11 +498,70 @@ El análisis con XGBoost (Figura \ref{fig:feature_importance}) revela que las va
 \subsubsection{Conclusiones Fase 2}
 
 \begin{enumerate}
-    \item \textbf{Logistic Regression sigue siendo el mejor modelo} con F1-test = 0.84782 (1º en Kaggle).
+    \item \textbf{Logistic Regression sigue siendo el mejor modelo} con F1-test = 0.84782 (2º en Kaggle).
     \item \textbf{LightGBM muestra potencial} con mejor generalización que XGBoost (F1-test = 0.73033).
     \item \textbf{XGBoost requiere optimización crítica} debido a overfitting evidente (gap de 0.043).
     \item \textbf{Las features espectrales son más discriminativas} que las de fluorescencia según análisis de importancia.
     \item \textbf{Modelos complejos no garantizan mejor rendimiento} en este problema específico.
+\end{enumerate}
+
+\clearpage
+\subsection{Fase 3: Optimización del Modelo}
+
+Tras confirmar que Logistic Regression era el mejor modelo, se realizaron múltiples experimentos de optimización para intentar superar el score de 0.84782 y alcanzar al líder (0.85561).
+
+\subsubsection{Experimentos de Optimización Realizados}
+
+Se implementaron 13 experimentos adicionales (Exp07-Exp19), de los cuales los más relevantes fueron:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{llccc}
+        \toprule
+        \textbf{Exp} & \textbf{Descripción} & \textbf{F1-CV} & \textbf{F1-Kaggle} & \textbf{Subido} \\
+        \midrule
+        07 & LR Optimizado (C=5, liblinear) & 0.8484 & -- & No \\
+        08 & VotingClassifier (LR+SVM+RF+NB) & 0.7742 & -- & No \\
+        09 & StackingClassifier & 0.8245 & -- & No \\
+        10 & SVM Linear optimizado & 0.8388 & -- & No \\
+        15 & Ridge Classifier ($\alpha$=1) & 0.8518 & 0.82485 & Sí \\
+        18 & LR + RFE(150) todas features & 0.8479 & -- & No \\
+        19 & LR + RFE(100) solo espectrales & 0.8517 & 0.84491 & Sí \\
+        \bottomrule
+    \end{tabular}
+    \caption{Experimentos de optimización más relevantes de la Fase 3. Solo Exp15 y Exp19 fueron subidos a Kaggle.}
+    \label{tab:fase3}
+\end{table}
+
+\subsubsection{Análisis de Resultados}
+
+\textbf{Hallazgo 1: El baseline es muy estable.} Se probaron múltiples variaciones del modelo LR (diferentes seeds, valores de C, solvers) y todas producían predicciones casi idénticas (99 muestras clasificadas como botrytis).
+
+\textbf{Hallazgo 2: Mayor F1-CV no implica mayor F1-Kaggle.} Ridge Classifier obtuvo el mejor F1-CV (0.8518), pero en Kaggle solo alcanzó 0.82485. Esto indica que el modelo baseline tiene características de generalización únicas.
+
+\textbf{Hallazgo 3: Las features espectrales son más discriminativas.}
+\begin{itemize}
+    \item Solo fluorescencia (4 features): F1-CV = 0.7221
+    \item Solo espectrales (300 features): F1-CV = 0.8366
+    \item Todas las features (304): F1-CV = 0.8278
+\end{itemize}
+
+\textbf{Hallazgo 4: RFE mejora el F1-CV pero no el F1-Kaggle.} La selección de las 100 mejores features espectrales mediante RFE aumentó el F1-CV a 0.8517, pero en Kaggle obtuvo 0.84491 (inferior al baseline).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{../graficas/comparacion_todos_experimentos.png}
+    \caption{Comparación de F1-CV de todos los experimentos por fase.}
+    \label{fig:comparacion_todos}
+\end{figure}
+
+\subsubsection{Conclusiones Fase 3}
+
+\begin{enumerate}
+    \item \textbf{El baseline LR simple sigue siendo el mejor modelo en Kaggle} (F1 = 0.84782), a pesar de que otros modelos obtienen mejor F1-CV.
+    \item \textbf{Existe una paradoja CV-Kaggle}: modelos con mejor validación cruzada no necesariamente generalizan mejor al test de Kaggle.
+    \item \textbf{La simplicidad del baseline es su fortaleza}: menos parámetros significa menos riesgo de sobreajuste a patrones específicos del train.
+    \item \textbf{El gap con el líder (0.85561 - 0.84782 = 0.00779)} es muy pequeño y probablemente requiere técnicas más avanzadas o información adicional.
 \end{enumerate}
 
 % 6. Conclusiones
@@ -515,21 +579,22 @@ El análisis con XGBoost (Figura \ref{fig:feature_importance}) revela que las va
 \subsection{Conclusiones de Modelos}
 
 \begin{enumerate}
-    \item \textbf{Logistic Regression es el modelo ganador} con F1-test = 0.84782, alcanzando el 1º lugar en Kaggle y demostrando que la simplicidad supera a la complejidad.
+    \item \textbf{Logistic Regression es el modelo ganador} con F1-test = 0.84782, alcanzando el 2º lugar en Kaggle (de 5 participantes) y demostrando que la simplicidad supera a la complejidad.
     \item \textbf{La reducción dimensional empeora el rendimiento}: PCA(3) reduce el F1 en 12\% (0.74561), confirmando que todas las 304 features aportan información única.
-    \item \textbf{LightGBM muestra el mejor potencial entre modelos complejos} con F1-test = 0.73033 y buena generalización, superando a XGBoost.
-    \item \textbf{XGBoost sufre overfitting severo} con gap de 0.043 entre CV y test, requiriendo optimización urgente de hiperparámetros.
-    \item \textbf{SelectKBest es contraproducente}: eliminar features reduce drásticamente el rendimiento (F1 = 0.59459, 30\% inferior al baseline).
-    \item \textbf{Las features espectrales son más discriminativas} que las de fluorescencia según análisis de importancia.
+    \item \textbf{La optimización de hiperparámetros no mejoró el resultado en Kaggle}: a pesar de obtener mejor F1-CV (hasta 0.8518 con Ridge), el F1-Kaggle fue inferior al baseline.
+    \item \textbf{Existe una paradoja CV-Kaggle}: el modelo más simple (LR default) generaliza mejor que modelos optimizados con mejor validación cruzada.
+    \item \textbf{Las features espectrales son más discriminativas} (F1-CV = 0.8366) que las de fluorescencia (F1-CV = 0.7221).
+    \item \textbf{El gap con el líder es mínimo}: solo 0.00779 puntos separan el 2º del 1º lugar.
 \end{enumerate}
 
 \subsection{Lecciones Aprendidas}
 
 \begin{enumerate}
-    \item Para problemas de clasificación con datos espectroscópicos, modelos lineales bien regularizados pueden superar a ensembles complejos.
-    \item La reducción dimensional no siempre mejora el rendimiento; depende de la naturaleza discriminativa de las features.
-    \item La generalización es más importante que el rendimiento en validación cruzada para competiciones Kaggle.
-    \item Es fundamental evaluar múltiples enfoques antes de asumir que modelos complejos son superiores.
+    \item \textbf{Simplicidad sobre complejidad}: Para problemas de clasificación con datos espectroscópicos, modelos lineales simples pueden superar a ensembles complejos y modelos optimizados.
+    \item \textbf{Validación cruzada no es garantía}: Un mejor F1-CV no implica mejor F1 en test real. La generalización depende de factores no capturados por CV.
+    \item \textbf{El baseline como referencia sólida}: Siempre evaluar el modelo más simple primero; a menudo es difícil de superar.
+    \item \textbf{Análisis exhaustivo de features}: Identificar qué grupos de features aportan más información (espectrales vs fluorescencia) ayuda a entender el problema.
+    \item \textbf{Documentar todos los experimentos}: Incluso los fallidos aportan conocimiento valioso sobre el comportamiento del dataset.
 \end{enumerate}
 
 \clearpage
@@ -544,27 +609,28 @@ P3/
 |   +-- sample_submission.csv
 +-- notebooks/                 # Jupyter notebooks
 |   +-- 01_EDA.ipynb          # Analisis exploratorio
-|   +-- 02_Experimentos.ipynb # Experimentos interactivos
+|   +-- 02_Experimentos.ipynb # Experimentos Fase 1-2
+|   +-- 03_Experimentos_Fase2.ipynb # Experimentos Fase 3
 +-- src/                       # Codigo fuente
 |   +-- preprocessing.py       # Preprocesado
 |   +-- models.py             # Modelos
 |   +-- utils.py              # Utilidades
 +-- scripts/                   # Scripts de experimentos
-|   +-- exp_01_baseline.py    # Exp 01: Baseline LR
-|   +-- exp_02_pca_logistic.py # Exp 02: PCA(3) + LR
-|   +-- exp_03_pca_xgboost.py  # Exp 03: PCA(7) + XGBoost
-|   +-- exp_04_selectkbest_rf.py # Exp 04: SKB(50) + RF
-|   +-- exp_05_xgboost_baseline.py # Exp 05: XGBoost
-|   +-- exp_06_lightgbm_baseline.py # Exp 06: LightGBM
-+-- submissions/               # Archivos CSV para Kaggle
-|   +-- submission_01_baseline_logisticregression_*.csv
-|   +-- submission_02_pca3_logistic_*.csv
-|   +-- submission_03_pca7_xgboost_*.csv
-|   +-- submission_04_selectkbest50_rf_*.csv
-|   +-- submission_05_xgboost_baseline_*.csv
-|   +-- submission_06_lightgbm_baseline_*.csv
+|   +-- exp_01_baseline.py    # Baseline LR (mejor resultado)
+|   +-- exp_02_pca_logistic.py # PCA(3) + LR
+|   +-- exp_03_pca_xgboost.py  # PCA(7) + XGBoost
+|   +-- exp_04_selectkbest_rf.py # SKB(50) + RF
+|   +-- exp_05_xgboost_baseline.py # XGBoost
+|   +-- exp_06_lightgbm_baseline.py # LightGBM
+|   +-- exp_07_lr_optimized.py # LR optimizado (C=5)
+|   +-- exp_15_ridge_optimized.py # Ridge Classifier
+|   +-- exp_18_feature_analysis.py # Analisis de features
+|   +-- exp_19_optimized_final.py # Spectral RFE(100)
++-- submissions/               # Archivos CSV para Kaggle (10 entries)
 +-- docs/                      # Documentacion
 |   +-- latex/                # Fuentes LaTeX
+|   +-- graficas/             # Graficas generadas
+|   +-- capturas/             # Capturas del leaderboard
 +-- requirements.txt          # Dependencias
 \end{verbatim}
 
