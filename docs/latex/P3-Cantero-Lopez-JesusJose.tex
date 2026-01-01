@@ -62,7 +62,7 @@
         \textbf{Usuario:} & JesusCantero\_UGR\_IN \\
         \textbf{Posición actual:} & 1 de 2 \\
         \textbf{Mejor Score:} & 0.84782 \\
-        \textbf{Número de entries:} & 3 \\
+        \textbf{Número de entries:} & 6 \\
     \end{tabular}
 \end{center}
 \clearpage
@@ -111,6 +111,7 @@ El dataset proporcionado contiene mediciones de hojas de tomate:
 \begin{itemize}
     \item \textbf{pandas} y \textbf{numpy}: manipulación de datos
     \item \textbf{scikit-learn}: modelos de clasificación, escalado y validación cruzada
+    \item \textbf{XGBoost} y \textbf{LightGBM}: algoritmos de gradient boosting
     \item \textbf{matplotlib} y \textbf{seaborn}: visualización
     \item \textbf{Jupyter Notebook}: análisis exploratorio interactivo
 \end{itemize}
@@ -543,17 +544,27 @@ P3/
 |   +-- sample_submission.csv
 +-- notebooks/                 # Jupyter notebooks
 |   +-- 01_EDA.ipynb          # Analisis exploratorio
+|   +-- 02_Experimentos.ipynb # Experimentos interactivos
 +-- src/                       # Codigo fuente
 |   +-- preprocessing.py       # Preprocesado
 |   +-- models.py             # Modelos
 |   +-- utils.py              # Utilidades
 +-- scripts/                   # Scripts de experimentos
-|   +-- exp_01_baseline.py    # Experimento baseline
+|   +-- exp_01_baseline.py    # Exp 01: Baseline LR
+|   +-- exp_02_pca_logistic.py # Exp 02: PCA(3) + LR
+|   +-- exp_03_pca_xgboost.py  # Exp 03: PCA(7) + XGBoost
+|   +-- exp_04_selectkbest_rf.py # Exp 04: SKB(50) + RF
+|   +-- exp_05_xgboost_baseline.py # Exp 05: XGBoost
+|   +-- exp_06_lightgbm_baseline.py # Exp 06: LightGBM
 +-- submissions/               # Archivos CSV para Kaggle
+|   +-- submission_01_baseline_logisticregression_*.csv
+|   +-- submission_02_pca3_logistic_*.csv
+|   +-- submission_03_pca7_xgboost_*.csv
+|   +-- submission_04_selectkbest50_rf_*.csv
+|   +-- submission_05_xgboost_baseline_*.csv
+|   +-- submission_06_lightgbm_baseline_*.csv
 +-- docs/                      # Documentacion
 |   +-- latex/                # Fuentes LaTeX
-+-- PLAN_TRABAJO.md           # Plan de trabajo
-+-- REGISTRO_EXPERIMENTOS.md  # Registro de experimentos
 +-- requirements.txt          # Dependencias
 \end{verbatim}
 
@@ -562,7 +573,11 @@ P3/
 
 \begin{itemize}
     \item Pedregosa, F. et al. (2011). \textit{Scikit-learn: Machine Learning in Python}. JMLR, 12, 2825--2830.
+    \item Chen, T. \& Guestrin, C. (2016). \textit{XGBoost: A Scalable Tree Boosting System}. KDD'16.
+    \item Ke, G. et al. (2017). \textit{LightGBM: A Highly Efficient Gradient Boosting Decision Tree}. NIPS'17.
     \item Documentación oficial de scikit-learn: \url{https://scikit-learn.org/stable/}
+    \item Documentación oficial de XGBoost: \url{https://xgboost.readthedocs.io/}
+    \item Documentación oficial de LightGBM: \url{https://lightgbm.readthedocs.io/}
     \item Documentación oficial de pandas: \url{https://pandas.pydata.org/}
 \end{itemize}
 
